@@ -4,7 +4,6 @@ const cardTemplate = document.querySelector('#card-template').content;
 // @todo: DOM узлы
 const cardsContainer = document.querySelector('.places__list');
 
-
 // @todo: Функция создания карточки
 function createCard(cardData, deleteCard) {
   const clonedFragment = cardTemplate.cloneNode(true);
@@ -25,7 +24,6 @@ function createCard(cardData, deleteCard) {
 function deleteCard(cardElement) {
   cardElement.remove(); 
 }
-
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(card => {
