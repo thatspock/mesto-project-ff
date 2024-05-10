@@ -14,6 +14,32 @@ const image = popupImage.querySelector(".popup__image");
 const popupClose = document.querySelectorAll('.popup__close');
 const popups = document.querySelectorAll('.popup');
 
+const profileName = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+const formElement = document.querySelector('.popup__form');
+const nameInput = document.querySelector('.popup__input_type_name');
+const jobInput = document.querySelector('.popup__input_type_description');
+
+// Обработчик «отправки» формы
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+
+  const nameValue = nameInput.value;
+  const jobValue = jobInput.value;
+
+  profileName.textContent = nameValue;
+  profileDescription.textContent = jobValue;
+}
+
+function fillFormWithCurrentValues() {
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileDescription.textContent;
+}
+
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+formElement.addEventListener('submit', handleFormSubmit); 
+
 // @todo: Функция создания карточки
 function createCard(cardData, deleteCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
@@ -49,7 +75,6 @@ function openPopup(popup) {
   document.addEventListener('keydown', closeOnEsc);
 };
 
-
 // Функция закрытия модального окна
 function closePopup(popup) {
   popup.classList.remove('popup_is-opened');
@@ -57,6 +82,8 @@ function closePopup(popup) {
 };
 
 editButton.addEventListener('click', () => {
+  fillFormWithCurrentValues();
+
   openPopup(popupEdit);
 });
 
