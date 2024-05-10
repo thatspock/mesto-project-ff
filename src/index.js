@@ -4,22 +4,26 @@ import './pages/index.css';
 
 const cardTemplate = document.querySelector('#card-template').content;
 const cardsContainer = document.querySelector('.places__list');
-
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const card = document.querySelector('.card');
 const popupNew = document.querySelector('.popup_type_new-card');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupImage = document.querySelector('.popup_type_image');
-const popupClose = document.querySelector('.popup__close');
+const caption = popupImage.querySelector('.popup__caption');
+const image = popupImage.querySelector(".popup__image");
+const popupClose = document.querySelectorAll('.popup__close');
+const popups = document.querySelectorAll('.popup');
 
 // @todo: Функция создания карточки
 function createCard(cardData, deleteCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
-  cardElement.querySelector('.card__image').src = cardData.link;
-  cardElement.querySelector('.card__image').alt = cardData.name;
+  const cardImage = cardElement.querySelector('.card__image');
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
   cardElement.querySelector('.card__title').textContent = cardData.name;
+
+  cardImage.addEventListener('click', openImage);
 
   cardElement.querySelector('.card__delete-button').addEventListener('click', () => {
     deleteCard(cardElement);
@@ -39,24 +43,39 @@ initialCards.forEach(card => {
   cardsContainer.append(cardElement); 
 });
 
+// Функция откртия модального окна
 function openPopup(popup) {
   popup.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeOnEsc);
-}
+};
 
+
+// Функция закрытия модального окна
 function closePopup(popup) {
   popup.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeOnEsc);
-}
+};
 
 editButton.addEventListener('click', () => {
   openPopup(popupEdit);
 });
 
-popupClose.addEventListener('click', () => {
-  const openedPopup = document.querySelector('.popup_is-opened');
-  closePopup(openedPopup);
-})
+addButton.addEventListener('click', () => {
+  openPopup(popupNew);
+});
+
+popupClose.forEach(button => {
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
+
+popups.forEach(popup => {
+  popup.addEventListener('click', (evt) => {
+    if (evt.target === popup) {
+      closePopup(popup);
+    }
+  })
+});
 
 function closeOnEsc(event) {
   if (event.key === 'Escape') {
@@ -65,4 +84,17 @@ function closeOnEsc(event) {
       closePopup(openedPopup);
     }
   }
+};
+
+// Функция открытия изображения в модальном окне
+function openImage(evt) {
+  const place = evt.currentTarget.closest(".card");
+  const cardImage = place.querySelector(".card__image");
+  const cardTitle = place.querySelector(".card__title");
+
+  caption.textContent = cardTitle.textContent;
+  image.src = cardImage.src;
+  image.alt = cardTitle.alt;
+
+  openPopup(popupImage);
 }
