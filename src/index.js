@@ -100,13 +100,19 @@ initialCards.forEach(card => {
 
 // Функция откртия модального окна
 function openPopup(popup) {
-  popup.classList.add('popup_is-opened');
+  popup.classList.add('popup_is-animated'); 
+  setTimeout(() => {
+    popup.classList.add('popup_is-opened');
+  }, 0); 
   document.addEventListener('keydown', closeOnEsc);
 };
 
 // Функция закрытия модального окна
 function closePopup(popup) {
   popup.classList.remove('popup_is-opened');
+  setTimeout(() => {
+    popup.classList.remove('popup_is-animated');
+  }, 600);
   document.removeEventListener('keydown', closeOnEsc);
 };
 
