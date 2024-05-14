@@ -20,6 +20,10 @@ export function createCard(cardData, deleteCard, toggleLike, openImage) {
   return cardElement;  
 }
 
+export function sortCards(cards) {
+  return cards.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 // Функция переключения лайка
 export function toggleLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active');

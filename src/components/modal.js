@@ -1,7 +1,3 @@
-const popupImage = document.querySelector('.popup_type_image');
-const caption = popupImage.querySelector('.popup__caption');
-const image = popupImage.querySelector(".popup__image");
-
 // Функция открытия модального окна
 export function openModal(popup) {
   popup.classList.add('popup_is-animated'); 
@@ -29,15 +25,10 @@ function closeOnEsc(event) {
   }
 };
 
-// Функция открытия изображения в модальном окне
-export function openImage(evt) {
-  const place = evt.currentTarget.closest(".card");
-  const cardImage = place.querySelector(".card__image");
-  const cardTitle = place.querySelector(".card__title");
-
-  caption.textContent = cardTitle.textContent;
-  image.src = cardImage.src;
-  image.alt = cardTitle.alt;
-
-  openModal(popupImage);
-}
+export function setupOverlayClose(popup) {
+  popup.addEventListener('click', (evt) => {
+    if (evt.target === popup) {
+      closeModal(popup);
+    }
+  })
+};

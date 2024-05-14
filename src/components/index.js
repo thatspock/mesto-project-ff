@@ -1,6 +1,6 @@
-import { initialCards } from './cards.js';
-import { createCard, toggleLike, deleteCard } from './card.js';
-import { openModal, closeModal, openImage } from './modal.js';
+import { initialCards } from './initialCards.js';
+import { createCard, toggleLike, deleteCard, sortCards } from './card.js';
+import { openModal, closeModal, setupOverlayClose } from './modal.js';
 import '../pages/index.css';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -10,19 +10,22 @@ const popupNew = document.querySelector('.popup_type_new-card');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupClose = document.querySelectorAll('.popup__close');
 const popups = document.querySelectorAll('.popup');
+const popupImage = document.querySelector('.popup_type_image');
+const caption = popupImage.querySelector('.popup__caption');
+const image = popupImage.querySelector(".popup__image");
 
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-const formElement = document.querySelector('.popup__form');
+const profileForm = document.querySelector('.popup__form');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_description');
 
-const formNewCard = popupNew.querySelector('.popup__form[name="new-place"]');
-const cardNameInput = formNewCard.querySelector('.popup__input[name="place-name"]');
-const cardLinkInput = formNewCard.querySelector('.popup__input[name="link"]');
+const newCardForm = popupNew.querySelector('.popup__form[name="new-place"]');
+const newCardNameInput = newCardForm.querySelector('.popup__input[name="place-name"]');
+const newCardLinkInput = newCardForm.querySelector('.popup__input[name="link"]');
 
 // Обработчик «отправки» формы
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
   const nameValue = nameInput.value;
@@ -34,37 +37,51 @@ function handleFormSubmit(evt) {
   closeModal(popupEdit);
 }
 
-function fillFormWithCurrentValues() {
+function fillProfileFormWithCurrentValues() {
   nameInput.value = profileName.textContent;
   jobInput.value = profileDescription.textContent;
 }
 
 // Прикрепляем обработчик к форме
-formElement.addEventListener('submit', handleFormSubmit); 
+profileForm.addEventListener('submit', handleProfileFormSubmit); 
 
-function handleNewCardSubmit(evt) {
+function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
 
-  const cardName = cardNameInput.value;
-  const cardLink = cardLinkInput.value;
+  const cardName = newCardNameInput.value;
+  const cardLink = newCardLinkInput.value;
 
   const cardElement = createCard({ name: cardName, link: cardLink }, deleteCard, toggleLike, openImage);
   cardsContainer.prepend(cardElement);
 
   closeModal(popupNew);
-  formNewCard.reset();
+  newCardForm.reset();
 }
 
-formNewCard.addEventListener('submit', handleNewCardSubmit);
+// Функция открытия изображения в модальном окне
+function openImage(evt) {
+  const place = evt.currentTarget.closest(".card");
+  const cardImage = place.querySelector(".card__image");
+  const cardTitle = place.querySelector(".card__title");
+
+  caption.textContent = cardTitle.textContent;
+  image.src = cardImage.src;
+  image.alt = cardTitle.alt;
+
+  openModal(popupImage);
+}
+
+newCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
 // Вывести карточки на страницу
-initialCards.forEach(card => {
+const sortedCards = sortCards(initialCards);
+sortedCards.forEach(card => {
   const cardElement = createCard(card, deleteCard, toggleLike, openImage);
   cardsContainer.append(cardElement); 
 });
 
 editButton.addEventListener('click', () => {
-  fillFormWithCurrentValues();
+  fillProfileFormWithCurrentValues();
   openModal(popupEdit);
 });
 
@@ -78,9 +95,5 @@ popupClose.forEach(button => {
 });
 
 popups.forEach(popup => {
-  popup.addEventListener('click', (evt) => {
-    if (evt.target === popup) {
-      closeModal(popup);
-    }
-  })
+  setupOverlayClose(popup);
 });
