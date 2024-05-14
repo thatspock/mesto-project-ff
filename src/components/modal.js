@@ -2,7 +2,7 @@ const popupImage = document.querySelector('.popup_type_image');
 const caption = popupImage.querySelector('.popup__caption');
 const image = popupImage.querySelector(".popup__image");
 
-// Функция откртия модального окна
+// Функция открытия модального окна
 export function openModal(popup) {
   popup.classList.add('popup_is-animated'); 
   setTimeout(() => {
