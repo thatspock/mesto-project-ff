@@ -20,6 +20,10 @@ const formElement = document.querySelector('.popup__form');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_description');
 
+const formNewCard = popupNew.querySelector('.popup__form[name="new-place"]');
+const cardNameInput = formNewCard.querySelector('.popup__input[name="place-name"]');
+const cardLinkInput = formNewCard.querySelector('.popup__input[name="link"]');
+
 // Обработчик «отправки» формы
 function handleFormSubmit(evt) {
   evt.preventDefault();
@@ -29,6 +33,8 @@ function handleFormSubmit(evt) {
 
   profileName.textContent = nameValue;
   profileDescription.textContent = jobValue;
+
+  closePopup(popupEdit);
 }
 
 function fillFormWithCurrentValues() {
@@ -40,8 +46,23 @@ function fillFormWithCurrentValues() {
 // он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handleFormSubmit); 
 
+function handleNewCardSubmit(evt) {
+  evt.preventDefault();
+
+  const cardName = cardNameInput.value;
+  const cardLink = cardLinkInput.value;
+
+  const cardElement = createCard({ name: cardName, link: cardLink }, deleteCard, toggleLike, openImage);
+  cardsContainer.prepend(cardElement);
+
+  closePopup(popupNew);
+  formNewCard.reset();
+}
+
+formNewCard.addEventListener('submit', handleNewCardSubmit);
+
 // @todo: Функция создания карточки
-function createCard(cardData, deleteCard) {
+function createCard(cardData, deleteCard, toggleLike, openImage) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
 
   const cardImage = cardElement.querySelector('.card__image');
@@ -51,11 +72,19 @@ function createCard(cardData, deleteCard) {
 
   cardImage.addEventListener('click', openImage);
 
+  const cardLikeButton = cardElement.querySelector('.card__like-button');
+  cardLikeButton.addEventListener('click', toggleLike);
+
   cardElement.querySelector('.card__delete-button').addEventListener('click', () => {
     deleteCard(cardElement);
   });
 
   return cardElement;  
+}
+
+// Функция переключения лайка
+function toggleLike(evt) {
+  evt.target.classList.toggle('card__like-button_is-active');
 }
 
 // @todo: Функция удаления карточки
@@ -65,7 +94,7 @@ function deleteCard(cardElement) {
 
 // @todo: Вывести карточки на страницу
 initialCards.forEach(card => {
-  const cardElement = createCard(card, deleteCard);
+  const cardElement = createCard(card, deleteCard, toggleLike, openImage);
   cardsContainer.append(cardElement); 
 });
 
@@ -83,7 +112,6 @@ function closePopup(popup) {
 
 editButton.addEventListener('click', () => {
   fillFormWithCurrentValues();
-
   openPopup(popupEdit);
 });
 
