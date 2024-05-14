@@ -25,7 +25,7 @@ function closeOnEsc(event) {
   }
 };
 
-export function setupOverlayClose(popup) {
+export function closePopupByOverlay(popup) {
   popup.addEventListener('click', (evt) => {
     if (evt.target === popup) {
       closeModal(popup);

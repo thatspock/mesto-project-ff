@@ -1,6 +1,6 @@
 import { initialCards } from './initialCards.js';
-import { createCard, toggleLike, deleteCard, sortCards } from './card.js';
-import { openModal, closeModal, setupOverlayClose } from './modal.js';
+import { createCard, toggleLike, deleteCard } from './card.js';
+import { openModal, closeModal, closePopupByOverlay } from './modal.js';
 import '../pages/index.css';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -16,11 +16,11 @@ const image = popupImage.querySelector(".popup__image");
 
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
-const profileForm = document.querySelector('.popup__form');
+const profileForm = document.querySelector('form[name="edit-profile"]');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_description');
 
-const newCardForm = popupNew.querySelector('.popup__form[name="new-place"]');
+const newCardForm = popupNew.querySelector('form[name="new-place"]');
 const newCardNameInput = newCardForm.querySelector('.popup__input[name="place-name"]');
 const newCardLinkInput = newCardForm.querySelector('.popup__input[name="link"]');
 
@@ -74,8 +74,7 @@ function openImage(evt) {
 newCardForm.addEventListener('submit', handleNewCardFormSubmit);
 
 // Вывести карточки на страницу
-const sortedCards = sortCards(initialCards);
-sortedCards.forEach(card => {
+initialCards.forEach(card => {
   const cardElement = createCard(card, deleteCard, toggleLike, openImage);
   cardsContainer.append(cardElement); 
 });
@@ -95,5 +94,5 @@ popupClose.forEach(button => {
 });
 
 popups.forEach(popup => {
-  setupOverlayClose(popup);
+  closePopupByOverlay(popup);
 });
