@@ -2,6 +2,9 @@ import { initialCards } from './initialCards.js';
 import { createCard, toggleLike, deleteCard } from './card.js';
 import { openModal, closeModal, closePopupByOverlay } from './modal.js';
 import '../pages/index.css';
+import { enableValidation, clearValidation } from './validation.js';
+
+enableValidation();
 
 const cardsContainer = document.querySelector('.places__list');
 const editButton = document.querySelector('.profile__edit-button');
@@ -56,6 +59,7 @@ function handleNewCardFormSubmit(evt) {
 
   closeModal(popupNew);
   newCardForm.reset();
+  clearValidation(newCardForm); 
 }
 
 // Функция открытия изображения в модальном окне
@@ -81,10 +85,13 @@ initialCards.forEach(card => {
 
 editButton.addEventListener('click', () => {
   fillProfileFormWithCurrentValues();
+  clearValidation(profileForm);
   openModal(popupEdit);
 });
 
 addButton.addEventListener('click', () => {
+  clearValidation(newCardForm); 
+  newCardForm.reset();
   openModal(popupNew);
 });
 
