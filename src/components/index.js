@@ -4,7 +4,16 @@ import { openModal, closeModal, closePopupByOverlay } from './modal.js';
 import '../pages/index.css';
 import { enableValidation, clearValidation } from './validation.js';
 
-enableValidation();
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+};
+
+enableValidation(validationConfig);
 
 const cardsContainer = document.querySelector('.places__list');
 const editButton = document.querySelector('.profile__edit-button');
@@ -59,7 +68,7 @@ function handleNewCardFormSubmit(evt) {
 
   closeModal(popupNew);
   newCardForm.reset();
-  clearValidation(newCardForm); 
+  clearValidation(newCardForm, validationConfig); 
 }
 
 // Функция открытия изображения в модальном окне
@@ -85,12 +94,12 @@ initialCards.forEach(card => {
 
 editButton.addEventListener('click', () => {
   fillProfileFormWithCurrentValues();
-  clearValidation(profileForm);
+  clearValidation(profileForm, validationConfig);
   openModal(popupEdit);
 });
 
 addButton.addEventListener('click', () => {
-  clearValidation(newCardForm); 
+  clearValidation(newCardForm, validationConfig); 
   newCardForm.reset();
   openModal(popupNew);
 });
