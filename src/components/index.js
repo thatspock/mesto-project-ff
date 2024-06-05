@@ -42,9 +42,26 @@ const newCardForm = popupNew.querySelector('form[name="new-place"]');
 const newCardNameInput = newCardForm.querySelector('.popup__input[name="place-name"]');
 const newCardLinkInput = newCardForm.querySelector('.popup__input[name="link"]');
 
+// Функция изменения текста кнопки
+function renderLoading(isLoading, buttonElement, initialText) {
+  if (isLoading) {
+    buttonElement.textContent = 'Сохранение...';
+    buttonElement.disabled = true;
+  } else {
+    buttonElement.textContent = initialText;
+    buttonElement.disabled = false;
+  }
+}
+
+
 // Обработчик «отправки» формы
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
+
+  const submitButton = evt.submitter;
+  const initialText = submitButton.textContent;
+  
+  renderLoading(true, submitButton, initialText);
 
   const avatarUrl = avatarInput.value;
 
@@ -55,12 +72,20 @@ function handleAvatarFormSubmit(evt) {
     })
     .catch((err) => {
       console.error(err);
+    })
+    .finally(() => {
+      renderLoading(false, submitButton, initialText);
     });
 }
 
 // Обработчик «отправки» формы
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+
+  const submitButton = evt.submitter;
+  const initialText = submitButton.textContent;
+  
+  renderLoading(true, submitButton, initialText);
 
   const nameValue = nameInput.value;
   const jobValue = jobInput.value;
@@ -73,6 +98,9 @@ function handleProfileFormSubmit(evt) {
     })
     .catch((err) => {
       console.error(err);
+    })
+    .finally(() => {
+      renderLoading(false, submitButton, initialText);
     });
 }
 
@@ -83,10 +111,16 @@ function fillProfileFormWithCurrentValues() {
 
 // Прикрепляем обработчик к форме
 profileForm.addEventListener('submit', handleProfileFormSubmit); 
+newCardForm.addEventListener('submit', handleNewCardFormSubmit);
 avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
+
+  const submitButton = evt.submitter;
+  const initialText = submitButton.textContent;
+  
+  renderLoading(true, submitButton, initialText);
 
   const cardName = newCardNameInput.value;
   const cardLink = newCardLinkInput.value;
@@ -101,6 +135,9 @@ function handleNewCardFormSubmit(evt) {
   })
   .catch((err) => {
     console.error(err);
+  })
+  .finally(() => {
+    renderLoading(false, submitButton, initialText);
   });
 }
 
