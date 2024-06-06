@@ -5,6 +5,14 @@
   margin: 0;
 }
 
+
+.profile__description {
+  max-width: 100%; /* Ограничение максимальной ширины */
+  overflow: hidden; /* Обрезка содержимого, которое выходит за пределы блока */
+  text-overflow: ellipsis; /* Добавление многоточия в конце длинного текста */
+  white-space: nowrap; /* Запрещает перенос текста на новую строку */
+}
+
 @media screen and (max-width: 568px) {
   .profile__description {
     font-size: 14px;

@@ -13,8 +13,6 @@ const validationConfig = {
   errorClass: 'popup__input-error_active'
 };
 
-enableValidation(validationConfig);
-
 const cardsContainer = document.querySelector('.places__list');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
@@ -41,6 +39,8 @@ const avatarInput = document.querySelector('.popup__input_type_avatar-link');
 const newCardForm = popupNew.querySelector('form[name="new-place"]');
 const newCardNameInput = newCardForm.querySelector('.popup__input[name="place-name"]');
 const newCardLinkInput = newCardForm.querySelector('.popup__input[name="link"]');
+
+let userId;
 
 // Функция изменения текста кнопки
 function renderLoading(isLoading, buttonElement, initialText) {
@@ -109,11 +109,6 @@ function fillProfileFormWithCurrentValues() {
   jobInput.value = profileDescription.textContent;
 }
 
-// Прикрепляем обработчик к форме
-profileForm.addEventListener('submit', handleProfileFormSubmit); 
-newCardForm.addEventListener('submit', handleNewCardFormSubmit);
-avatarForm.addEventListener('submit', handleAvatarFormSubmit);
-
 function handleNewCardFormSubmit(evt) {
   evt.preventDefault();
 
@@ -154,27 +149,10 @@ function openImage(evt) {
   openModal(popupImage);
 }
 
+// Прикрепляем обработчик к форме
+profileForm.addEventListener('submit', handleProfileFormSubmit); 
 newCardForm.addEventListener('submit', handleNewCardFormSubmit);
-
-let userId;
-
-Promise.all([getUserInfo(), getInitialCards()])
-  .then(([userInfo, cards]) => {
-    // Обновление профиля пользователя
-    profileName.textContent = userInfo.name;
-    profileDescription.textContent = userInfo.about;
-    profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
-    userId = userInfo._id;
-
-    // Отображение карточек
-    cards.forEach(card => {
-      const cardElement = createCard(card, deleteCard, toggleLike, openImage, userId);
-      cardsContainer.append(cardElement);
-    });
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+avatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 editButton.addEventListener('click', () => {
   fillProfileFormWithCurrentValues();
@@ -203,10 +181,21 @@ popups.forEach(popup => {
   closePopupByOverlay(popup);
 });
 
-getUserInfo()
-  .then((userInfo) => {
+enableValidation(validationConfig);
+
+Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userInfo, cards]) => {
+    // Обновление профиля пользователя
     profileName.textContent = userInfo.name;
     profileDescription.textContent = userInfo.about;
+    profileAvatar.style.backgroundImage = `url(${userInfo.avatar})`;
+    userId = userInfo._id;
+
+    // Отображение карточек
+    cards.forEach(card => {
+      const cardElement = createCard(card, deleteCard, toggleLike, openImage, userId);
+      cardsContainer.append(cardElement);
+    });
   })
   .catch((err) => {
     console.error(err);

@@ -16,6 +16,12 @@ export function createCard(cardData, deleteCard, toggleLike, openImage, userId) 
   cardImage.addEventListener('click', openImage);
 
   const cardLikeButton = cardElement.querySelector('.card__like-button');
+
+   // Проверка, лайкнул ли текущий пользователь карточку
+  if (cardData.likes.some(like => like._id === userId)) {
+    cardLikeButton.classList.add('card__like-button_is-active');
+  }
+
   cardLikeButton.addEventListener('click', (evt) => toggleLike(evt, cardData, likeCount));
 
   const cardDeleteButton = cardElement.querySelector('.card__delete-button');
