@@ -1,4 +1,4 @@
-import { likeCard, unlikeCard } from './api.js';
+import { likeCard, unlikeCard, deleteCard as apiDeleteCard } from './api.js';
 
 // Функция создания карточки
 export function createCard(cardData, deleteCard, toggleLike, openImage, userId) {
@@ -13,7 +13,7 @@ export function createCard(cardData, deleteCard, toggleLike, openImage, userId) 
   const likeCount = cardElement.querySelector('.card__like-count');
   likeCount.textContent = cardData.likes.length;
 
-  cardImage.addEventListener('click', openImage);
+  cardImage.addEventListener('click', () => openImage(cardData.link, cardData.name));
 
   const cardLikeButton = cardElement.querySelector('.card__like-button');
 
@@ -60,22 +60,12 @@ export function toggleLike(evt, cardData, likeCount) {
     }
 }
 
-// Функция удаления карточки
 export function deleteCard(cardId, cardElement) {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-14/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: {
-      authorization: 'd5d084e6-7ab4-435f-846f-dd03cae80573'
-    }
-  })
-  .then((res) => {
-    if (res.ok) {
+  return apiDeleteCard(cardId)
+    .then(() => {
       cardElement.remove();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }

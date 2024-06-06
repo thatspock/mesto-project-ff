@@ -137,14 +137,10 @@ function handleNewCardFormSubmit(evt) {
 }
 
 // Функция открытия изображения в модальном окне
-function openImage(evt) {
-  const place = evt.currentTarget.closest(".card");
-  const cardImage = place.querySelector(".card__image");
-  const cardTitle = place.querySelector(".card__title");
-
-  caption.textContent = cardTitle.textContent;
-  image.src = cardImage.src;
-  image.alt = cardTitle.alt;
+function openImage(link, name) {
+  caption.textContent = name;
+  image.src = link;
+  image.alt = name;
 
   openModal(popupImage);
 }
