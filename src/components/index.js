@@ -53,7 +53,6 @@ function renderLoading(isLoading, buttonElement, initialText) {
   }
 }
 
-
 // Обработчик «отправки» формы
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();

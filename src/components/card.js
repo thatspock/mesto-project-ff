@@ -60,6 +60,7 @@ export function toggleLike(evt, cardData, likeCount) {
     }
 }
 
+// Функция удаления карточки
 export function deleteCard(cardId, cardElement) {
   return apiDeleteCard(cardId)
     .then(() => {
