@@ -19,7 +19,7 @@ const addButton = document.querySelector('.profile__add-button');
 const popupNew = document.querySelector('.popup_type_new-card');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupEditAvatar = document.querySelector('.popup_type_edit-avatar');
-const popupCloses = document.querySelectorAll('.popup__close');
+const popupCloseButtons = document.querySelectorAll('.popup__close');
 const popups = document.querySelectorAll('.popup');
 const popupImage = document.querySelector('.popup_type_image');
 const caption = popupImage.querySelector('.popup__caption');
@@ -167,7 +167,7 @@ avatarEditButton.addEventListener('click', () => {
   openModal(popupEditAvatar);
 });
 
-popupCloses.forEach(button => {
+popupCloseButtons.forEach(button => {
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closeModal(popup));
 });
